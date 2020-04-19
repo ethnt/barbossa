@@ -1,0 +1,88 @@
+- name: Install aptitude using apt
+  apt:
+    name: aptitude
+    state: latest
+    update_cache: yes
+    force_apt_get: yes
+
+- name: Ensure 'wheel' group present
+  group:
+    name: wheel
+    state: present
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Create 'barbossa' user
+  user:
+    name: barbossa
+    groups:
+      - wheel
+    append: yes
+    state: present
+    createhome: yes
+    uid: 1002
+    shell: /usr/bin/bash
+
+- name: Add authorized key to 'barbossa'
+  authorized_key:
+    user: barbossa
+    key: "{{item}}"
+  with_file:
+    - ~/.ssh/id_rsa.pub
+
+- name: Install required system packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+
+- name: Install pip dependencies
+  pip:
+    name: "{{ item }}"
+    state: present
+  loop: [ 'jsondiff', 'pyyaml', 'docker', 'docker-compose' ]
+
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu bionic stable
+    state: present
+
+- name: Install docker-ce
+  apt:
+    update_cache: yes
+    name: docker-ce
+    state: latest
+
+- name: Create media directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: barbossa
+    group: barbossa
+  loop: [ '/opt/barbossa/data', '/opt/barbossa/data/tv', '/opt/barbossa/data/movies', '/opt/barbossa/data/config' ]
+
+- name: Run docker-compose
+  docker_compose:
+    project_src: /opt/barbossa
+
+- name: Fix data directory permissions
+  file:
+    path: "/opt/barbossa/data"
+    state: directory
+    mode: '0755'
+    owner: barbossa
+    group: barbossa
+    recurse: yes

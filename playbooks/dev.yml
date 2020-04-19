@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Create Barbossa install directory
+      file:
+        path: /opt/barbossa
+        state: directory
+        mode: '0755'
+
+    - name: Copy Barbossa to install directory
+      copy: src=/vagrant/ dest=/opt/barbossa/ remote_src=yes directory_mode=yes
+
+    - import_tasks: init.yml
