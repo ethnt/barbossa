@@ -10,9 +10,8 @@
 
     - name: Copy Barbossa to install directory
       copy:
-        src: /vagrant/
+        src: ../
         dest: /opt/barbossa/
-        remote_src: yes
         directory_mode: yes
 
     - import_tasks: init.yml

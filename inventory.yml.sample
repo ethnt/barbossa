@@ -1,0 +1,6 @@
+all:
+  hosts:
+    barbossa.test:
+      ansible_user: your_username
+      ansible_password: your_password
+      ansible_become_password: your_password

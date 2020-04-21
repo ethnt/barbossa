@@ -1,8 +1,8 @@
 version: '3.4'
 services:
-  nzbget:
-    container_name: nzbget
-    image: linuxserver/nzbget:latest
+  sabnzbd:
+    container_name: sabnzbd
+    image: linuxserver/sabnzbd
     restart: unless-stopped
     network_mode: host
     environment:
@@ -10,8 +10,9 @@ services:
       - PGID=${PGID} # default group id, defined in .env
       - TZ=${TZ} # timezone, defined in .env
     volumes:
-      - ${ROOT}/downloads:/downloads # download folder
-      - ${ROOT}/config/nzbget:/config # config files
+      - ${CONFIG_ROOT}/sabnzbd:/config # config files
+      - ${NFS_ROOT}/downloads:/downloads
+      - ${NFS_ROOT}/incomplete-downloads:/incomplete-downloads #optional
 
   sonarr:
     container_name: sonarr
@@ -23,9 +24,9 @@ services:
       - PGID=${PGID} # default group id, defined in .env
       - TZ=${TZ} # timezone, defined in .env
     volumes:
-      - ${ROOT}/config/sonarr:/config # config files
-      - ${ROOT}/complete/tv:/tv # tv shows folder
-      - ${ROOT}/downloads:/downloads # download folder
+      - ${CONFIG_ROOT}/sonarr:/config # config files
+      - ${NFS_ROOT}/media/tv:/tv # tv shows folder
+      - ${NFS_ROOT}/downloads:/downloads # download folder
 
   radarr:
     container_name: radarr
@@ -37,11 +38,11 @@ services:
       - PGID=${PGID} # default group id, defined in .env
       - TZ=${TZ} # timezone, defined in .env
     volumes:
-      - ${ROOT}/config/radarr:/config # config files
-      - ${ROOT}/complete/movies:/movies # movies folder
-      - ${ROOT}/downloads:/downloads # download folder
+      - ${CONFIG_ROOT}/radarr:/config # config files
+      - ${NFS_ROOT}/media/movies:/movies # movies folder
+      - ${NFS_ROOT}/downloads:/downloads # download folder
 
-  plex-server:
+  plex:
     image: linuxserver/plex
     container_name: plex
     network_mode: host
@@ -49,12 +50,10 @@ services:
       - PUID=1002
       - PGID=1003
       - VERSION=docker
-      - UMASK_SET=022 #optional
-      - PLEX_CLAIM=claim-3yyAChseQLKsyiPmrex7
+      - UMASK_SET=022
+      - PLEX_CLAIM=${PLEX_CLAIM}
     volumes:
-      - ${ROOT}/complete/tv:/tv
-      - ${ROOT}/complete/movies:/movies
-      - ${ROOT}/config/plex/db:/config # plex database
-      - ${ROOT}/config/plex/transcode:/transcode # temp transcoded files
-      - ${ROOT}/complete:/data # media library
+      - ${CONFIG_ROOT}/plex/db:/config # plex database
+      - ${CONFIG_ROOT}/plex/transcode:/transcode # temp transcoded files
+      - ${NFS_ROOT}/media:/media
     restart: unless-stopped

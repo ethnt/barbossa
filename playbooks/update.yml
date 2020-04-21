@@ -1,0 +1,19 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Stop docker-compose containers
+      docker_compose:
+        project_src: /opt/barbossa
+        state: absent
+
+    - name: Copy Barbossa to install directory
+      copy:
+        src: ../
+        dest: /opt/barbossa/
+        directory_mode: yes
+
+    - name: Run docker-compose
+      docker_compose:
+        project_src: /opt/barbossa
+        state: present

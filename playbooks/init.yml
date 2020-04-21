@@ -41,12 +41,13 @@
     name: "{{ item }}"
     state: latest
     update_cache: yes
-  loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+  loop: [ 'python3-setuptools', 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3', 'python3-pip', 'virtualenv', 'python-pip', 'python-setuptools' ]
 
 - name: Install pip dependencies
   pip:
     name: "{{ item }}"
     state: present
+    executable: pip3
   loop: [ 'jsondiff', 'pyyaml', 'docker', 'docker-compose' ]
 
 - name: Add Docker GPG key
@@ -65,6 +66,14 @@
     name: docker-ce
     state: latest
 
+- name: Create configuration directory
+  file:
+    path: "/etc/barbossa"
+    state: directory
+    mode: '0755'
+    owner: barbossa
+    group: barbossa
+
 - name: Create media directories
   file:
     path: "{{ item }}"
@@ -72,7 +81,7 @@
     mode: '0755'
     owner: barbossa
     group: barbossa
-  loop: [ '/opt/barbossa/data', '/opt/barbossa/data/tv', '/opt/barbossa/data/movies', '/opt/barbossa/data/config' ]
+  loop: [ '/media/enas/barbossa', '/media/enas/barbossa/downloads', '/media/enas/barbossa/media' ]
 
 - name: Run docker-compose
   docker_compose:
@@ -80,7 +89,7 @@
 
 - name: Fix data directory permissions
   file:
-    path: "/opt/barbossa/data"
+    path: "/media/enas/barbossa"
     state: directory
     mode: '0755'
     owner: barbossa
