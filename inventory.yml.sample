@@ -4,3 +4,6 @@ all:
       ansible_user: your_username
       ansible_password: your_password
       ansible_become_password: your_password
+      ansible_python_interpreter: "/usr/bin/python3"
+  vars:
+    nfs_mount: /media/nas

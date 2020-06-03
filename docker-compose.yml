@@ -6,13 +6,13 @@ services:
     restart: unless-stopped
     network_mode: host
     environment:
-      - PUID=${PUID} # default user id, defined in .env
-      - PGID=${PGID} # default group id, defined in .env
-      - TZ=${TZ} # timezone, defined in .env
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
-      - ${CONFIG_ROOT}/sabnzbd:/config # config files
+      - ${CONFIG_ROOT}/sabnzbd:/config
       - ${NFS_ROOT}/downloads:/downloads
-      - ${NFS_ROOT}/incomplete-downloads:/incomplete-downloads #optional
+      - ${NFS_ROOT}/incomplete-downloads:/incomplete-downloads
 
   sonarr:
     container_name: sonarr
@@ -20,13 +20,13 @@ services:
     restart: unless-stopped
     network_mode: host
     environment:
-      - PUID=${PUID} # default user id, defined in .env
-      - PGID=${PGID} # default group id, defined in .env
-      - TZ=${TZ} # timezone, defined in .env
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
-      - ${CONFIG_ROOT}/sonarr:/config # config files
-      - ${NFS_ROOT}/media/tv:/tv # tv shows folder
-      - ${NFS_ROOT}/downloads:/downloads # download folder
+      - ${CONFIG_ROOT}/sonarr:/config
+      - ${NFS_ROOT}/media/tv:/tv
+      - ${NFS_ROOT}/downloads:/downloads
 
   radarr:
     container_name: radarr
@@ -34,13 +34,13 @@ services:
     restart: unless-stopped
     network_mode: host
     environment:
-      - PUID=${PUID} # default user id, defined in .env
-      - PGID=${PGID} # default group id, defined in .env
-      - TZ=${TZ} # timezone, defined in .env
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
-      - ${CONFIG_ROOT}/radarr:/config # config files
-      - ${NFS_ROOT}/media/movies:/movies # movies folder
-      - ${NFS_ROOT}/downloads:/downloads # download folder
+      - ${CONFIG_ROOT}/radarr:/config
+      - ${NFS_ROOT}/media/movies:/movies
+      - ${NFS_ROOT}/downloads:/downloads
 
   plex:
     image: linuxserver/plex
@@ -53,7 +53,7 @@ services:
       - UMASK_SET=022
       - PLEX_CLAIM=${PLEX_CLAIM}
     volumes:
-      - ${CONFIG_ROOT}/plex/db:/config # plex database
-      - ${CONFIG_ROOT}/plex/transcode:/transcode # temp transcoded files
+      - ${CONFIG_ROOT}/plex/db:/config
+      - ${CONFIG_ROOT}/plex/transcode:/transcode
       - ${NFS_ROOT}/media:/media
     restart: unless-stopped
