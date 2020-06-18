@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 services:
   sabnzbd:
     container_name: sabnzbd
@@ -57,3 +57,51 @@ services:
       - ${CONFIG_ROOT}/plex/transcode:/transcode
       - ${NFS_ROOT}/media:/media
     restart: unless-stopped
+
+  grafana:
+    image: matisq/grafana:latest
+    ports:
+      - 3000:3000
+    links:
+      - influxdb:influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - GF_SECURITY_SECRET_KEY=${GRAFANA_SECRET_KEY}
+      - GF_USERS_ALLOW_SIGN_UP="false"
+      - GF_USERS_ALLOW_ORG_CREATE="true"
+      - GF_AUTH_ANONYMOUS_ENABLED="true"
+      - GF_AUTH_ANONYMOUS_ORG_NAME=grafana
+      - GF_DASHBOARDS_JSON_ENABLED="true"
+      - GF_DASHBOARDS_JSON_PATH=/opt/grafana
+    volumes:
+      - ${CONFIG_ROOT}/grafana/lib:/var/lib/grafana
+      - ${CONFIG_ROOT}/grafana/log:/var/log/grafana
+      - ${CONFIG_ROOT}/grafana/lib/plugins:/var/lib/grafana/plugins
+    restart: unless-stopped
+
+  influxdb:
+    image: matisq/influxdb:latest
+    ports:
+      - 8083:8083
+      - 8086:8086
+    environment:
+      - INFLUX_DATABASE=telegraf
+      - INLFUX_ADMIN_USER=${INLFUX_ADMIN_USER}
+      - INFLUX_ADMIN_PASS=${INFLUX_ADMIN_PASSWORD}
+    volumes:
+      - ${CONFIG_ROOT}/influxdb:/var/lib/influxdb
+
+  telegraf:
+    image: matisq/telegraf:latest
+    links:
+      - influxdb:influxdb
+    environment:
+      - HOST_NAME=telegraf
+      - INFLUXDB_HOST=influxdb
+      - INFLUXDB_PORT=8086
+      - DATABASE=telegraf
+    tty: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    privileged: true
