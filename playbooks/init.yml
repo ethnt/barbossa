@@ -41,14 +41,26 @@
     name: "{{ item }}"
     state: latest
     update_cache: yes
-  loop: [ "python3-setuptools", "apt-transport-https", "ca-certificates", "curl", "software-properties-common", "python3", "python3-pip", "virtualenv", "python-pip", "python-setuptools" ]
+  loop:
+    [
+      "python3-setuptools",
+      "apt-transport-https",
+      "ca-certificates",
+      "curl",
+      "software-properties-common",
+      "python3",
+      "python3-pip",
+      "virtualenv",
+      "python-pip",
+      "python-setuptools",
+    ]
 
 - name: Install pip dependencies
   pip:
     name: "{{ item }}"
     state: present
     executable: pip3
-  loop: [ "jsondiff", "pyyaml", "docker", "docker-compose" ]
+  loop: ["jsondiff", "pyyaml", "docker", "docker-compose"]
 
 - name: Add Docker GPG key
   apt_key:
@@ -81,7 +93,12 @@
     mode: "0755"
     owner: barbossa
     group: barbossa
-  loop: [ "{{ nfs_mount }}/downloads", "{{ nfs_mount }}/incomplete-downloads", "{{ nfs_mount }}/media" ]
+  loop:
+    [
+      "{{ nfs_mount }}/downloads",
+      "{{ nfs_mount }}/incomplete-downloads",
+      "{{ nfs_mount }}/media",
+    ]
 
 - name: Run docker-compose
   docker_compose:

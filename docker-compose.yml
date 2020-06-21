@@ -58,51 +58,55 @@ services:
       - ${NFS_ROOT}/media:/media
     restart: unless-stopped
 
-  grafana:
-    image: matisq/grafana:latest
-    ports:
-      - 3000:3000
-    links:
-      - influxdb:influxdb
-    environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: admin
-      GF_SECURITY_SECRET_KEY: grafana
-      GF_USERS_ALLOW_SIGN_UP: "true"
-      GF_USERS_ALLOW_ORG_CREATE: "true"
-      GF_AUTH_ANONYMOUS_ENABLED: "true"
-      GF_AUTH_ANONYMOUS_ORG_NAME: grafana
-      GF_DASHBOARDS_JSON_ENABLED: "true"
-      GF_DASHBOARDS_JSON_PATH: /opt/grafana
-    volumes:
-      - ${CONFIG_ROOT}/grafana/lib:/var/lib/grafana
-      - ${CONFIG_ROOT}/grafana/log:/var/log/grafana
-      - ${CONFIG_ROOT}/grafana/plugins:/var/lib/grafana/plugins
-    restart: unless-stopped
-
   influxdb:
-    image: matisq/influxdb:latest
+    build: ./components/tig/influxdb
+    container_name: influxdb
     ports:
-      - 8083:8083
-      - 8086:8086
-    environment:
-      INFLUX_DATABASE: "telegraf"
-      INLFUX_ADMIN_USER: "grafana"
-      INFLUX_ADMIN_PASS: "grafana"
+      - ${INFLUXDB_PORT}:${INFLUXDB_PORT}
     volumes:
-      - ${NFS_ROOT}/data/influxdb:/var/lib/influxdb
+      - ${CONFIG_ROOT}/influx/lib:/var/lib/influxdb
     restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - tig
 
   telegraf:
-    image: matisq/telegraf:latest
+    build: ./components/tig/telegraf
+    container_name: telegraf
     links:
-      - influxdb:influxdb
+      - influxdb
     environment:
       HOST_NAME: "telegraf"
       INFLUXDB_HOST: "influxdb"
       INFLUXDB_PORT: "8086"
       DATABASE: "telegraf"
-    tty: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/hostfs/proc
     privileged: true
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - tig
+
+  grafana:
+    build: ./components/tig/grafana
+    container_name: grafana
+    ports:
+      - ${GRAFANA_PORT}:${GRAFANA_PORT}
+    links:
+      - influxdb
+    volumes:
+      - ${CONFIG_ROOT}/grafana/lib:/var/lib/grafana
+      - ${CONFIG_ROOT}/grafana/log:/var/log/grafana
+      - ${CONFIG_ROOT}/grafana/plugins:/var/lib/grafana/plugins
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - tig
+
+networks:
+  tig:

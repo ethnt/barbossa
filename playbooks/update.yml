@@ -2,29 +2,26 @@
 - hosts: all
   become: true
   tasks:
-    - name: Stop docker-compose containers
-      docker_compose:
-        project_src: /opt/barbossa
-        state: absent
+    # - name: Stop docker-compose containers
+    #   docker_compose:
+    #     project_src: /opt/barbossa
+    #     state: absent
 
     - name: Copy Barbossa to install directory
       copy:
         src: ../
         dest: /opt/barbossa/
         directory_mode: yes
-
-    - name: Pull new Docker containers
-      docker_compose:
-        project_src: /opt/barbossa
-        state: present
-        pull: yes
-
-    - name: Run docker-compose
-      docker_compose:
-        project_src: /opt/barbossa
-        state: present
-        recreate: always
-
-    - name: Prune Docker containers
-      docker_prune:
-        containers: yes
+    # - name: Pull new Docker containers
+    #   docker_compose:
+    #     project_src: /opt/barbossa
+    #     state: present
+    #     pull: yes
+    # - name: Run docker-compose
+    #   docker_compose:
+    #     project_src: /opt/barbossa
+    #     state: present
+    #     recreate: always
+    # - name: Prune Docker containers
+    #   docker_prune:
+    #     containers: yes

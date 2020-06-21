@@ -1,0 +1,2 @@
+chip "iwlwifi_1-virtual-0"
+  ignore temp1
