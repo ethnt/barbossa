@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Copy Barbossa to correct directory
+      copy:
+        src: ../nix/
+        dest: /etc/nixos/
+        directory_mode: yes

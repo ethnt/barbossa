@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Copy Barbossa to correct directory
+      copy:
+        src: ../nix/
+        dest: /etc/nixos/
+        directory_mode: yes
+
+    - name: Switch to new Nix derivation
+      shell: sudo nixos-rebuild switch
