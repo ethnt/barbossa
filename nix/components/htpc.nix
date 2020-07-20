@@ -2,8 +2,14 @@
 
 with lib;
 
-let cfg = config.services.htpc;
+let
+  cfg = config.services.htpc;
+  unstable = import <nixos-unstable> { config = { }; };
 in {
+  disabledModules = [ "services/misc/radarr.nix" ];
+
+  imports = [ <nixos-unstable/nixos/modules/services/misc/radarr.nix> ];
+
   options.services.htpc = {
     enable = mkOption {
       description = "Whether to enable HTPC";
@@ -25,6 +31,11 @@ in {
   };
 
   config = mkIf cfg.enable {
+    nixpkgs.config = {
+      allowUnfree = true;
+      packageOverrides = pkgs: { radarr = unstable.radarr; };
+    };
+
     services.plex = {
       enable = true;
       openFirewall = true;

@@ -9,6 +9,8 @@ let
 
   configFile = pkgs.writeText "config.toml" cfg.extraConfig;
 in {
+  disabledModules = [ "services/monitoring/telegraf.nix" ];
+
   options = {
     services.telegraf = {
       enable = mkEnableOption "telegraf server";
