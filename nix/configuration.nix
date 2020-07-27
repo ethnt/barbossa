@@ -65,9 +65,11 @@
 
   services.openssh.enable = true;
 
-  networking.firewall.allowedTCPPorts = [ 22 80 161 443 548 5601 ];
-  networking.firewall.allowedUDPPorts = [ 22 80 161 443 548 5601 ];
-  networking.firewall.enable = true;
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 22 80 161 443 548 5601 60003 ];
+    allowedUDPPorts = [ 22 80 161 443 548 5601 60003 ];
+  };
 
   services.htpc = {
     enable = true;
