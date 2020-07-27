@@ -21,11 +21,23 @@
     };
   };
 
-  networking.hostName = "barbossa";
+  networking = {
+    hostName = "barbossa";
+    useDHCP = false;
 
-  networking.useDHCP = false;
-  networking.interfaces.eno1.useDHCP = true;
-  networking.interfaces.wlp0s20f3.useDHCP = true;
+    interfaces.eno1.useDHCP = true;
+    interfaces.wlp0s20f3.useDHCP = true;
+
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 22 80 161 443 548 5601 ];
+      allowedUDPPorts = [ 22 80 161 443 548 5601 ];
+      allowedUDPPortRanges = [{
+        from = 60000;
+        to = 61000;
+      }];
+    };
+  };
 
   time.timeZone = "America/New_York";
 
@@ -44,32 +56,26 @@
   };
 
   environment.systemPackages = with pkgs; [
-    wget
-    vim_configurable
-    htop
-    fzf
-    fd
-    mosh
     apacheHttpd
-    python3
-    ripgrep
+    bat
+    fd
+    filebeat
+    fzf
+    git
+    htop
     lm_sensors
+    mosh
     net-snmp
     nodejs-12_x
-    git
-    bat
-    filebeat
+    python3
+    ripgrep
+    vim_configurable
+    wget
   ];
 
   programs.fish.enable = true;
 
   services.openssh.enable = true;
-
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 22 80 161 443 548 5601 60003 ];
-    allowedUDPPorts = [ 22 80 161 443 548 5601 60003 ];
-  };
 
   services.htpc = {
     enable = true;
@@ -86,17 +92,17 @@
   services.elk = {
     enable = true;
     systemdUnits = [
-      "sonarr.service"
-      "radarr.service"
-      "nzbget.service"
-      "plex.service"
-      "nginx.service"
-      "telegraf.service"
-      "influxdb.service"
-      "grafana.service"
       "elasticsearch.service"
+      "grafana.service"
+      "influxdb.service"
       "logstash.service"
       "netatalk.service"
+      "nginx.service"
+      "nzbget.service"
+      "plex.service"
+      "radarr.service"
+      "sonarr.service"
+      "telegraf.service"
     ];
   };
 
