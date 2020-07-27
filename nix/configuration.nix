@@ -5,7 +5,9 @@
     ./hardware-configuration.nix
     ./components/htpc.nix
     ./components/tig.nix
+    ./components/elk.nix
     ./components/web.nix
+    ./components/time-machine.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -56,15 +58,16 @@
     nodejs-12_x
     git
     bat
+    filebeat
   ];
 
   programs.fish.enable = true;
 
   services.openssh.enable = true;
 
-  # networking.firewall.allowedTCPPorts = [ 22 80 443 8080 7878 8989 32400 ];
-  # networking.firewall.allowedUDPPorts = [ 22 80 443 8080 7878 8989 32400 ];
-  networking.firewall.enable = false;
+  networking.firewall.allowedTCPPorts = [ 22 80 161 443 548 5601 ];
+  networking.firewall.allowedUDPPorts = [ 22 80 161 443 548 5601 ];
+  networking.firewall.enable = true;
 
   services.htpc = {
     enable = true;
@@ -78,11 +81,36 @@
     user = "barbossa";
   };
 
+  services.elk = {
+    enable = true;
+    systemdUnits = [
+      "sonarr.service"
+      "radarr.service"
+      "nzbget.service"
+      "plex.service"
+      "nginx.service"
+      "telegraf.service"
+      "influxdb.service"
+      "grafana.service"
+      "elasticsearch.service"
+      "logstash.service"
+      "netatalk.service"
+    ];
+  };
+
   services.web = {
     enable = true;
     group = "users";
     user = "barbossa";
     contactEmail = "ethan.turkeltaub+barbossa@hey.com";
+  };
+
+  services.timeMachine = {
+    enable = true;
+    user = "ethan";
+    capsuleName = "TARDIS";
+    backupDirectory = "/mnt/omnibus/time-machine";
+    sizeLimit = "4000000";
   };
 
   users.extraUsers.barbossa = {

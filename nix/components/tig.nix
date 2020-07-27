@@ -406,7 +406,7 @@ in {
 
         [[inputs.snmp]]
           # List of agents to poll
-          agents = [ "192.168.1.59", "192.168.1.60", "192.168.1.61", "192.168.1.66" ]
+          agents = [ "192.168.1.59", "192.168.1.60", "192.168.1.61" ]
           # Polling interval
           interval = "60s"
           # Timeout for each SNMP query.

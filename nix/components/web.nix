@@ -39,6 +39,18 @@ in {
       group = cfg.group;
       user = cfg.user;
 
+      virtualHosts."e10.land" = {
+        addSSL = true;
+        enableACME = true;
+        root = "/var/www/e10.land";
+
+        locations."/" = {
+          extraConfig = ''
+            autoindex on;
+          '';
+        };
+      };
+
       virtualHosts."barbossa.dev" = {
         addSSL = true;
         enableACME = true;
@@ -70,6 +82,15 @@ in {
         root = "/var/www/barbossa.dev/grafana";
 
         locations."/" = { proxyPass = "http://localhost:3000"; };
+      };
+
+      virtualHosts."kibana.barbossa.dev" = {
+        addSSL = true;
+        enableACME = true;
+
+        root = "/var/www/barbossa.dev/kibana";
+
+        locations."/" = { proxyPass = "http://localhost:5601"; };
       };
 
       virtualHosts."nzbget.barbossa.dev" = {
