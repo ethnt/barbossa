@@ -120,6 +120,24 @@ in {
         locations."/" = { proxyPass = "http://localhost:8989"; };
       };
 
+      virtualHosts."tautulli.barbossa.dev" = {
+        addSSL = true;
+        enableACME = true;
+
+        root = "/var/www/barbossa.dev/tautulli";
+
+        locations."/" = { proxyPass = "http://localhost:8181"; };
+      };
+
+      virtualHosts."jackett.barbossa.dev" = {
+        addSSL = true;
+        enableACME = true;
+
+        root = "/var/www/barbossa.dev/jackett";
+
+        locations."/" = { proxyPass = "http://localhost:9117"; };
+      };
+
       virtualHosts."plex.barbossa.dev" = {
         http2 = true;
 

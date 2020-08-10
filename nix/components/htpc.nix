@@ -62,5 +62,18 @@ in {
       group = cfg.group;
       user = cfg.user;
     };
+
+    services.tautulli = {
+      enable = true;
+      group = cfg.group;
+      user = cfg.user;
+    };
+
+    services.jackett = {
+      enable = true;
+      openFirewall = true;
+      group = cfg.group;
+      user = cfg.user;
+    };
   };
 }
