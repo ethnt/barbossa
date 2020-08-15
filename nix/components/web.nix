@@ -138,6 +138,18 @@ in {
         locations."/" = { proxyPass = "http://localhost:9117"; };
       };
 
+      virtualHosts."hass.barbossa.dev" = {
+        addSSL = true;
+        enableACME = true;
+
+        root = "/var/www/barbossa.dev/hass";
+
+        locations."/" = {
+          proxyPass = "http://localhost:8123";
+          proxyWebsockets = true;
+        };
+      };
+
       virtualHosts."plex.barbossa.dev" = {
         http2 = true;
 

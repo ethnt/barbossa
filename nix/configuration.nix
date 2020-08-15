@@ -8,6 +8,8 @@
     ./components/elk.nix
     ./components/web.nix
     ./components/time-machine.nix
+    ./components/apartment.nix
+    ./components/satan.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -30,8 +32,8 @@
 
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 80 161 443 548 5601 ];
-      allowedUDPPorts = [ 22 80 161 443 548 5601 ];
+      allowedTCPPorts = [ 22 80 161 443 548 5601 8123 ];
+      allowedUDPPorts = [ 22 80 161 443 548 5601 8123 9993 ];
       allowedUDPPortRanges = [{
         from = 60000;
         to = 61000;
@@ -120,6 +122,10 @@
     backupDirectory = "/mnt/omnibus/time-machine";
     sizeLimit = "4000000";
   };
+
+  services.apartment = { enable = true; };
+
+  services.satan = { enable = true; };
 
   users.extraUsers.barbossa = {
     createHome = true;
