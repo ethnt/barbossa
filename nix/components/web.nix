@@ -34,10 +34,28 @@ in {
     security.acme.acceptTerms = true;
     security.acme.email = cfg.contactEmail;
 
+    users.groups.nginx = { };
+
+    users.extraUsers.nginx = {
+      extraGroups = [ "wheel" ];
+      group = "nginx";
+      isNormalUser = false;
+      uid = 1100;
+    };
+
     services.nginx = {
       enable = true;
       group = cfg.group;
       user = cfg.user;
+
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+
+      clientMaxBodySize = "2G";
+
+      sslCiphers = "AES256+EECDH:AES256+EDH:!aNULL";
 
       virtualHosts."e10.land" = {
         addSSL = true;
@@ -146,6 +164,16 @@ in {
 
         locations."/" = {
           proxyPass = "http://localhost:8123";
+          proxyWebsockets = true;
+        };
+      };
+
+      virtualHosts."cloud.barbossa.dev" = {
+        addSSL = true;
+        enableACME = true;
+
+        locations."/" = {
+          proxyPass = "http://localhost:8090";
           proxyWebsockets = true;
         };
       };

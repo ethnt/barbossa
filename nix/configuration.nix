@@ -10,6 +10,7 @@
     ./components/time-machine.nix
     ./components/apartment.nix
     ./components/satan.nix
+    ./components/cloud.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -32,7 +33,7 @@
 
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 80 161 443 548 5601 8123 ];
+      allowedTCPPorts = [ 22 80 161 443 548 5601 8123 8090 ];
       allowedUDPPorts = [ 22 80 161 443 548 5601 8123 9993 ];
       allowedUDPPortRanges = [{
         from = 60000;
@@ -131,6 +132,10 @@
   services.apartment = { enable = true; };
 
   services.satan = { enable = true; };
+
+  services.cloud = { enable = true; };
+
+  services.backup = { enable = false; };
 
   users.extraUsers.barbossa = {
     createHome = true;
