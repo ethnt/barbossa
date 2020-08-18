@@ -20,7 +20,5 @@ in {
       joinNetworks = [ "e4da7455b2239e18" ];
       port = 9993;
     };
-
-    services.tailscale = { enable = true; };
   };
 }

@@ -105,6 +105,11 @@
       "radarr.service"
       "sonarr.service"
       "telegraf.service"
+      "netatalk.service"
+      "avahi-daemon.service"
+      "docker-hass.service"
+      "sshd.service"
+      "firewall.service"
     ];
   };
 
