@@ -168,6 +168,15 @@ in {
         };
       };
 
+      virtualHosts."monica.barbossa.dev" = {
+        addSSL = true;
+        enableACME = true;
+
+        locations."/" = {
+          proxyPass = "http://localhost:8070";
+        };
+      };
+
       virtualHosts."cloud.barbossa.dev" = {
         addSSL = true;
         enableACME = true;

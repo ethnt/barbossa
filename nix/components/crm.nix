@@ -21,7 +21,7 @@ in {
         APP_KEY = "ZmzrCkecdc6bK1KXpCV36uB0eRmn03AL";
         DB_HOST = "mysql";
       };
-      extraDockerOptions = [ "--network=nextcloud" ];
+      extraDockerOptions = [ "--network=monica" ];
       ports = [ "8070:80" ];
       volumes = [ "/var/lib/monica:/var/www/monica/storage" ];
     };
@@ -31,8 +31,8 @@ in {
       environment = {
         MYSQL_RANDOM_ROOT_PASSWORD = "true";
         MYSQL_DATABASE = "monica";
-        MYSQL_USER = "mysql";
-        MYSQL_PASSWORD = "mysql";
+        MYSQL_USER = "homestead";
+        MYSQL_PASSWORD = "secret";
       };
       extraDockerOptions = [ "--network=monica" ];
       volumes = [ "/var/lib/mysql:/var/lib/mysql" ];

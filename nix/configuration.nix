@@ -11,6 +11,7 @@
     ./components/apartment.nix
     ./components/satan.nix
     ./components/cloud.nix
+    ./components/crm.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -135,7 +136,7 @@
 
   services.cloud = { enable = true; };
 
-  services.backup = { enable = false; };
+  services.crm = { enable = true; };
 
   users.extraUsers.barbossa = {
     createHome = true;
