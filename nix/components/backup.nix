@@ -13,10 +13,16 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.duplicati = {
-      enable = true;
-      interface = "*";
-      user = "ethan";
+    environment.systemPackages = with pkgs; [ restic ];
+
+    services.restic.backups = {
+      configuration = {
+        paths = [ "/etc/nixos" "/var/lib" "/home" ];
+        repository = "s3:s3.amazonaws.com/barbossa-configuration-backup";
+        passwordFile = "/etc/secrets/restic/password";
+        s3CredentialsFile = "/etc/secrets/restic/s3";
+        initialize = true;
+      };
     };
   };
 }
