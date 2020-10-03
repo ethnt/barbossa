@@ -3,16 +3,15 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./components/htpc.nix
-    ./components/tig.nix
-    ./components/elk.nix
-    ./components/web.nix
-    ./components/time-machine.nix
-    ./components/apartment.nix
-    ./components/satan.nix
-    ./components/cloud.nix
-    ./components/crm.nix
-    ./components/backup.nix
+    ./modules/htpc.nix
+    ./modules/tig.nix
+    ./modules/elk.nix
+    ./modules/web.nix
+    ./modules/time-machine.nix
+    ./modules/apartment.nix
+    ./modules/satan.nix
+    ./modules/cloud.nix
+    ./modules/backup.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -97,22 +96,23 @@
   services.elk = {
     enable = true;
     systemdUnits = [
+      "avahi-daemon.service"
+      "docker-hass.service"
       "elasticsearch.service"
+      "firewall.service"
       "grafana.service"
       "influxdb.service"
       "logstash.service"
+      "netatalk.service"
       "netatalk.service"
       "nginx.service"
       "nzbget.service"
       "plex.service"
       "radarr.service"
+      "restic-backups-configuration"
       "sonarr.service"
-      "telegraf.service"
-      "netatalk.service"
-      "avahi-daemon.service"
-      "docker-hass.service"
       "sshd.service"
-      "firewall.service"
+      "telegraf.service"
     ];
   };
 
@@ -136,8 +136,6 @@
   services.satan = { enable = true; };
 
   services.cloud = { enable = true; };
-
-  services.crm = { enable = true; };
 
   services.backup = { enable = true; };
 

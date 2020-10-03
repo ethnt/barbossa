@@ -22,6 +22,10 @@ in {
         passwordFile = "/etc/secrets/restic/password";
         s3CredentialsFile = "/etc/secrets/restic/s3";
         initialize = true;
+        timerConfig = {
+          OnCalendar = "03:00";
+          RandomizedDelaySec = "3h";
+        };
       };
     };
   };
