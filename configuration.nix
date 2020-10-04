@@ -3,15 +3,15 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./modules/htpc.nix
-    ./modules/tig.nix
-    ./modules/elk.nix
-    ./modules/web.nix
-    ./modules/time-machine.nix
-    ./modules/apartment.nix
-    ./modules/satan.nix
-    ./modules/cloud.nix
-    ./modules/backup.nix
+    # ./modules/htpc.nix
+    # ./modules/tig.nix
+    # ./modules/elk.nix
+    # ./modules/web.nix
+    # ./modules/time-machine.nix
+    # ./modules/apartment.nix
+    # ./modules/satan.nix
+    # ./modules/cloud.nix
+    # ./modules/backup.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -81,63 +81,63 @@
 
   services.openssh.enable = true;
 
-  services.htpc = {
-    enable = true;
-    group = "users";
-    user = "barbossa";
-  };
+  # services.htpc = {
+  #   enable = true;
+  #   group = "users";
+  #   user = "barbossa";
+  # };
 
-  services.tig = {
-    enable = true;
-    group = "users";
-    user = "barbossa";
-  };
+  # services.tig = {
+  #   enable = true;
+  #   group = "users";
+  #   user = "barbossa";
+  # };
 
-  services.elk = {
-    enable = true;
-    systemdUnits = [
-      "avahi-daemon.service"
-      "docker-hass.service"
-      "elasticsearch.service"
-      "firewall.service"
-      "grafana.service"
-      "influxdb.service"
-      "logstash.service"
-      "netatalk.service"
-      "netatalk.service"
-      "nginx.service"
-      "nzbget.service"
-      "plex.service"
-      "radarr.service"
-      "restic-backups-configuration"
-      "sonarr.service"
-      "sshd.service"
-      "telegraf.service"
-    ];
-  };
+  # services.elk = {
+  #   enable = true;
+  #   systemdUnits = [
+  #     "avahi-daemon.service"
+  #     "docker-hass.service"
+  #     "elasticsearch.service"
+  #     "firewall.service"
+  #     "grafana.service"
+  #     "influxdb.service"
+  #     "logstash.service"
+  #     "netatalk.service"
+  #     "netatalk.service"
+  #     "nginx.service"
+  #     "nzbget.service"
+  #     "plex.service"
+  #     "radarr.service"
+  #     "restic-backups-configuration"
+  #     "sonarr.service"
+  #     "sshd.service"
+  #     "telegraf.service"
+  #   ];
+  # };
 
-  services.web = {
-    enable = true;
-    group = "users";
-    user = "barbossa";
-    contactEmail = "ethan.turkeltaub+barbossa@hey.com";
-  };
+  # services.web = {
+  #   enable = true;
+  #   group = "users";
+  #   user = "barbossa";
+  #   contactEmail = "ethan.turkeltaub+barbossa@hey.com";
+  # };
 
-  services.timeMachine = {
-    enable = true;
-    user = "ethan";
-    capsuleName = "TARDIS";
-    backupDirectory = "/mnt/omnibus/time-machine";
-    sizeLimit = "4000000";
-  };
+  # services.timeMachine = {
+  #   enable = true;
+  #   user = "ethan";
+  #   capsuleName = "TARDIS";
+  #   backupDirectory = "/mnt/omnibus/time-machine";
+  #   sizeLimit = "4000000";
+  # };
 
-  services.apartment = { enable = true; };
+  # services.apartment = { enable = true; };
 
-  services.satan = { enable = true; };
+  # services.satan = { enable = true; };
 
-  services.cloud = { enable = true; };
+  # services.cloud = { enable = true; };
 
-  services.backup = { enable = true; };
+  # services.backup = { enable = true; };
 
   users.extraUsers.barbossa = {
     createHome = true;
