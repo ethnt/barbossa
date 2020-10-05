@@ -187,6 +187,15 @@ in {
         };
       };
 
+      virtualHosts."ombi.barbossa.dev" = {
+        addSSL = true;
+        enableACME = true;
+
+        locations."/" = {
+          proxyPass = "http://localhost:3579";
+        };
+      };
+
       virtualHosts."plex.barbossa.dev" = {
         http2 = true;
 

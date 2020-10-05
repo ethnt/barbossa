@@ -36,6 +36,8 @@ in {
       packageOverrides = pkgs: { radarr = unstable.radarr; };
     };
 
+    virtualisation.docker.enable = true;
+
     services.plex = {
       enable = true;
       openFirewall = true;
@@ -74,6 +76,13 @@ in {
       openFirewall = true;
       group = cfg.group;
       user = cfg.user;
+    };
+
+    docker-containers.ombi = {
+      image = "linuxserver/ombi";
+      environment = { TZ = "America/New_York"; };
+      extraDockerOptions = [ "--net=host" ];
+      volumes = [ "/var/lib/ombi:/config" ];
     };
   };
 }
